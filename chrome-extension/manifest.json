@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "SAT Captcha Solver Hybrid",
+  "version": "2.1.0",
+  "description": "Resuelve captchas del SAT con modelo real + fallback simple",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.sat.gob.mx/*",
+    "http://localhost:5000/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*.sat.gob.mx/*"],
+      "js": [
+        "src/simple-model.js",
+        "src/simple-solver.js",
+        "src/api-solver.js",
+        "src/content-hybrid.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "SAT Captcha Solver Hybrid"
+  },
+  "background": {
+    "service_worker": "src/background.js"
+  }
+}

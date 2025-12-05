@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            width: 300px;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        .subtitle {
+            font-size: 12px;
+            opacity: 0.8;
+            margin: 5px 0 0 0;
+        }
+        
+        .status-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .status-active { background: #28a745; }
+        .status-inactive { background: #6c757d; }
+        .status-loading { background: #ffc107; animation: pulse 1s infinite; }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #007cba;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #005a87;
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            opacity: 0.7;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">🤖</div>
+        <h1 class="title">SAT Captcha Solver</h1>
+        <p class="subtitle">Resuelve captchas automáticamente</p>
+    </div>
+    
+    <div class="status-card">
+        <div class="status-indicator">
+            <div class="status-dot status-loading" id="statusDot"></div>
+            <span id="statusText">Verificando estado...</span>
+        </div>
+        <div id="modelStatus">Cargando modelo...</div>
+    </div>
+    
+    <div class="controls">
+        <button class="btn btn-primary" id="toggleBtn">
+            <span id="toggleText">Activar</span>
+        </button>
+        <button class="btn btn-secondary" id="scanBtn">
+            Escanear
+        </button>
+    </div>
+    
+    <div class="stats">
+        <div class="stat-item">
+            <span class="stat-number" id="solvedCount">0</span>
+            <span class="stat-label">Resueltos</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number" id="accuracyRate">0%</span>
+            <span class="stat-label">Precisión</span>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <div>Versión 1.0.0</div>
+        <div>Powered by TensorFlow.js</div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
