@@ -1,19 +1,23 @@
 {
   "manifest_version": 3,
   "name": "SAT Captcha Solver Hybrid",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Resuelve captchas del SAT con modelo real + fallback simple",
   "permissions": [
     "activeTab",
     "storage"
   ],
   "host_permissions": [
-    "*://*.sat.gob.mx/*",
+    "https://loginda.siat.sat.gob.mx/*",
+    "https://verificacfdi.facturaelectronica.sat.gob.mx/*",
     "http://localhost:5000/*"
   ],
   "content_scripts": [
     {
-      "matches": ["*://*.sat.gob.mx/*"],
+      "matches": [
+        "https://loginda.siat.sat.gob.mx/*",
+        "https://verificacfdi.facturaelectronica.sat.gob.mx/*"
+      ],
       "js": [
         "src/simple-model.js",
         "src/simple-solver.js",
