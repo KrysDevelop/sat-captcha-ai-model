@@ -1,22 +1,26 @@
 {
   "manifest_version": 3,
-  "name": "SAT Captcha Solver Hybrid",
+  "name": "Asesor.ia Captcha Resolver",
   "version": "2.1.1",
-  "description": "Resuelve captchas del SAT con modelo real + fallback simple",
+  "description": "Resuelve captchas del SAT automáticamente con Asesor.ia",
   "permissions": [
     "activeTab",
     "storage"
   ],
   "host_permissions": [
     "https://loginda.siat.sat.gob.mx/*",
+    "https://cfdiau.sat.gob.mx/*",
     "https://verificacfdi.facturaelectronica.sat.gob.mx/*",
+    "https://portalcfdi.factura.sat.gob.mx/*",
     "http://localhost:5000/*"
   ],
   "content_scripts": [
     {
       "matches": [
         "https://loginda.siat.sat.gob.mx/*",
-        "https://verificacfdi.facturaelectronica.sat.gob.mx/*"
+        "https://cfdiau.sat.gob.mx/*",
+        "https://verificacfdi.facturaelectronica.sat.gob.mx/*",
+        "https://portalcfdi.factura.sat.gob.mx/*"
       ],
       "js": [
         "src/simple-model.js",
@@ -29,7 +33,12 @@
   ],
   "action": {
     "default_popup": "popup/popup.html",
-    "default_title": "SAT Captcha Solver Hybrid"
+    "default_title": "Asesor.ia Captcha Resolver"
+  },
+  "icons": {
+    "16": "img/Logo.png",
+    "48": "img/Logo.png",
+    "128": "img/Logo.png"
   },
   "background": {
     "service_worker": "src/background.js"
