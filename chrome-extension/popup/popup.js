@@ -17,6 +17,7 @@ class PopupController {
         this.statusDot = document.getElementById('statusDot');
         this.statusText = document.getElementById('statusText');
         this.modelStatus = document.getElementById('modelStatus');
+        this.aiWave = document.getElementById('aiWave');
         this.toggleBtn = document.getElementById('toggleBtn');
         this.toggleText = document.getElementById('toggleText');
         this.scanBtn = document.getElementById('scanBtn');
@@ -108,6 +109,15 @@ class PopupController {
             case 'loading':
                 this.statusDot.classList.add('status-loading');
                 break;
+        }
+
+        // Mostrar/ocultar la animación de ondas de IA según el estado
+        if (this.aiWave) {
+            if (status === 'loading') {
+                this.aiWave.classList.remove('hidden');
+            } else {
+                this.aiWave.classList.add('hidden');
+            }
         }
     }
 

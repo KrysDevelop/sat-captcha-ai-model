@@ -65,6 +65,34 @@
             50% { opacity: 0.5; }
             100% { opacity: 1; }
         }
+
+        /* Animación de ondas de IA (barras que suben y bajan) */
+        .ai-wave {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 18px;
+            margin-top: 8px;
+        }
+
+        .ai-wave span {
+            width: 3px;
+            background: #00a88a;
+            border-radius: 999px;
+            animation: wave 0.8s infinite ease-in-out;
+            transform-origin: bottom;
+        }
+
+        .ai-wave span:nth-child(1) { animation-delay: 0s; }
+        .ai-wave span:nth-child(2) { animation-delay: 0.1s; }
+        .ai-wave span:nth-child(3) { animation-delay: 0.2s; }
+        .ai-wave span:nth-child(4) { animation-delay: 0.3s; }
+        .ai-wave span:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes wave {
+            0%, 100% { transform: scaleY(0.4); opacity: 0.4; }
+            50% { transform: scaleY(1); opacity: 1; }
+        }
         
         .controls {
             display: flex;
@@ -156,6 +184,14 @@
             <span id="statusText">Verificando estado...</span>
         </div>
         <div id="modelStatus">Cargando modelo...</div>
+        <!-- Animación de ondas de IA, se muestra solo en estado loading -->
+        <div class="ai-wave hidden" id="aiWave">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </div>
     
     <div class="controls">

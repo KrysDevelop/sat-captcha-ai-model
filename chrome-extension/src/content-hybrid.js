@@ -425,43 +425,96 @@ class HybridCaptchaDetector {
      * Agregar indicador visual al captcha
      */
     addCaptchaIndicator(imgElement) {
-        const indicator = document.createElement('div');
-        indicator.className = 'sat-captcha-indicator';
-        indicator.innerHTML = this.useAPI ? '🧠 Procesando con IA...' : '🎲 Procesando simple...';
-        indicator.style.cssText = `
-            position: absolute;
-            top: -25px;
-            left: 0;
-            background: ${this.useAPI ? '#28a745' : '#ffc107'};
-            color: white;
-            padding: 2px 8px;
-            border-radius: 3px;
-            font-size: 12px;
-            font-family: Arial, sans-serif;
-            z-index: 10000;
-            pointer-events: none;
-        `;
-        
-        imgElement.style.position = 'relative';
-        imgElement.parentNode.style.position = 'relative';
-        imgElement.parentNode.appendChild(indicator);
+        // Inyectar estilos globales de animación para el input si aún no existen
+        if (!document.getElementById('sat-captcha-input-style')) {
+            const style = document.createElement('style');
+            style.id = 'sat-captcha-input-style';
+            style.textContent = `
+                .sat-captcha-input-loading {
+                    position: relative;
+                    z-index: 1;
+                    box-shadow: 0 0 0 1px rgba(0,168,138,0.45) !important;
+                    background-image: linear-gradient(120deg, rgba(0,168,138,0.15), rgba(255,255,255,0.2), rgba(0,168,138,0.15)) !important;
+                    background-size: 200% 200% !important;
+                    animation: sat-input-pulse 1.2s infinite ease-in-out !important;
+                }
+                .sat-captcha-input-success {
+                    box-shadow: 0 0 0 2px rgba(40,167,69,0.8) !important;
+                    background-image: linear-gradient(120deg, rgba(40,167,69,0.18), rgba(255,255,255,0.25), rgba(40,167,69,0.18)) !important;
+                    background-size: 200% 200% !important;
+                    animation: sat-input-pulse 1.2s infinite ease-in-out !important;
+                }
+                .sat-captcha-input-error {
+                    box-shadow: 0 0 0 2px rgba(220,53,69,0.7);
+                    animation: sat-input-error 0.5s ease-out forwards;
+                }
+                @keyframes sat-input-pulse {
+                    0% {
+                        box-shadow: 0 0 0 1px rgba(0,168,138,0.25);
+                        background-position: 0% 50%;
+                    }
+                    50% {
+                        box-shadow: 0 0 8px 2px rgba(0,168,138,0.65);
+                        background-position: 100% 50%;
+                    }
+                    100% {
+                        box-shadow: 0 0 0 1px rgba(0,168,138,0.25);
+                        background-position: 0% 50%;
+                    }
+                }
+                @keyframes sat-input-success {
+                    0% { box-shadow: 0 0 0 2px rgba(40,167,69,0.0); }
+                    100% { box-shadow: 0 0 0 2px rgba(40,167,69,0.7); }
+                }
+                @keyframes sat-input-error {
+                    0% { box-shadow: 0 0 0 2px rgba(220,53,69,0.0); }
+                    100% { box-shadow: 0 0 0 2px rgba(220,53,69,0.7); }
+                }
+                .sat-captcha-credit-link {
+                    display: inline-block;
+                    margin-top: 2px;
+                    font-size: 11px;
+                    font-family: Arial, sans-serif;
+                    color: #0b63ce;
+                    text-decoration: underline;
+                    cursor: pointer;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Marcar el input asociado como "cargando"
+        const inputField = this.findCaptchaInputField(imgElement);
+        if (inputField) {
+            inputField.classList.remove('sat-captcha-input-success', 'sat-captcha-input-error');
+            inputField.classList.add('sat-captcha-input-loading');
+        }
     }
 
     /**
      * Mostrar indicador de éxito
      */
     showSuccessIndicator(imgElement, solution, usedAPI) {
-        const indicator = imgElement.parentNode.querySelector('.sat-captcha-indicator');
-        if (indicator) {
-            const method = usedAPI ? '🧠' : '🎲';
-            indicator.innerHTML = `${method} ${solution}`;
-            indicator.style.background = usedAPI ? '#28a745' : '#17a2b8';
-            
+        const inputField = this.findCaptchaInputField(imgElement);
+        if (inputField) {
+            inputField.classList.remove('sat-captcha-input-loading', 'sat-captcha-input-error');
+            inputField.classList.add('sat-captcha-input-success');
+
+            // Agregar crédito "Resuelto por Asesor.ia" debajo del campo (una sola vez)
+            const parent = inputField.parentNode;
+            if (parent && !parent.querySelector('.sat-captcha-credit-link')) {
+                const credit = document.createElement('a');
+                credit.className = 'sat-captcha-credit-link';
+                credit.href = 'https://martinezmarquez.com/';
+                credit.target = '_blank';
+                credit.rel = 'noopener noreferrer';
+                credit.textContent = 'Resuelto por Asesor.ia';
+                parent.appendChild(credit);
+            }
+            // Retirar el efecto después de un momento para no dejar sombra permanente
             setTimeout(() => {
-                if (indicator.parentNode) {
-                    indicator.parentNode.removeChild(indicator);
-                }
-            }, 5000);
+                inputField.classList.remove('sat-captcha-input-success');
+            }, 2500);
         }
     }
 
@@ -469,17 +522,13 @@ class HybridCaptchaDetector {
      * Mostrar indicador de error
      */
     showErrorIndicator(imgElement, errorMsg) {
-        const indicator = imgElement.parentNode.querySelector('.sat-captcha-indicator');
-        if (indicator) {
-            indicator.innerHTML = '❌ Error';
-            indicator.style.background = '#dc3545';
-            indicator.title = errorMsg;
-            
+        const inputField = this.findCaptchaInputField(imgElement);
+        if (inputField) {
+            inputField.classList.remove('sat-captcha-input-loading', 'sat-captcha-input-success');
+            inputField.classList.add('sat-captcha-input-error');
             setTimeout(() => {
-                if (indicator.parentNode) {
-                    indicator.parentNode.removeChild(indicator);
-                }
-            }, 3000);
+                inputField.classList.remove('sat-captcha-input-error');
+            }, 1500);
         }
     }
 
