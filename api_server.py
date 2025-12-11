@@ -134,7 +134,8 @@ if __name__ == '__main__':
     print("   - POST /solve-captcha - Resolver captcha")
     print("   - GET  /test - Prueba de conexión")
     print()
-    print("🔗 URL: http://localhost:5000")
+    print("🔗 Escuchando en: http://0.0.0.0:5000 (todas las interfaces)")
+    print("   Usa la IP de esta máquina en tu red, por ejemplo: http://192.168.0.169:5000")
     print("⚠️  Mantén este servidor corriendo mientras uses la extensión")
-    
-    app.run(host='localhost', port=5000, debug=True)
+
+    app.run(host='0.0.0.0', port=5000, debug=True)
