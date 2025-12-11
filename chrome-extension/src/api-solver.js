@@ -41,6 +41,14 @@ class APICaptchaSolver {
         console.log('🔍 Procesando captcha con modelo real...');
 
         try {
+            // Determinar tipo de página para seleccionar modelo en el servidor
+            let pageType = 'color';
+            const host = window.location.hostname || '';
+            if (host.includes('verificacfdi.facturaelectronica.sat.gob.mx')) {
+                pageType = 'gris';
+            }
+            console.log('🧠 Tipo de página detectado para API:', pageType);
+
             // Convertir ImageData a base64
             const base64Image = await this.imageDataToBase64(imageData);
             
@@ -51,7 +59,8 @@ class APICaptchaSolver {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    image: base64Image
+                    image: base64Image,
+                    pageType: pageType
                 })
             });
 
