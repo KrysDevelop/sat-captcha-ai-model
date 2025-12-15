@@ -1,0 +1,7 @@
+services:
+  sat-captcha-api:
+    build: .
+    container_name: sat-captcha-api
+    ports:
+      - "5000:5000"
+    restart: unless-stopped

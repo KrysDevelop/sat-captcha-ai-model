@@ -13,7 +13,8 @@
     "https://verificacfdi.facturaelectronica.sat.gob.mx/*",
     "https://portalcfdi.factura.sat.gob.mx/*",
     "http://localhost:5000/*",
-    "http://192.168.0.169:5000/*"
+    "http://192.168.0.169:5000/*",
+    "http://192.168.0.92:5000/*"
   ],
   "content_scripts": [
     {

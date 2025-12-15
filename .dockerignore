@@ -1,0 +1,12 @@
+.git
+__pycache__
+*.pyc
+chrome-extension
+chrome-extension (2).zip
+chrome-extension.crx
+chrome-extension.pem
+dataset
+dataset_gris
+model/logs
+model_gris/logs
+*.log

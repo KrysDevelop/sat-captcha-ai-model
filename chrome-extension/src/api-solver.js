@@ -4,7 +4,7 @@
 class APICaptchaSolver {
     constructor() {
         // Servidor central del modelo en la red local
-        this.apiUrl = 'http://192.168.0.169:5000';
+        this.apiUrl = 'http://192.168.0.92:5000';
         this.isReady = false;
         this.config = MODEL_CONFIG;
         
