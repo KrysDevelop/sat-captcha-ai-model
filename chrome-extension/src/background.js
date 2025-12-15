@@ -53,6 +53,14 @@ class BackgroundService {
     async handleMessage(message, sender, sendResponse) {
         try {
             switch (message.action) {
+                case 'apiHealth':
+                    sendResponse(await this.handleApiHealth(message));
+                    break;
+
+                case 'solveCaptchaApi':
+                    sendResponse(await this.handleSolveCaptchaApi(message));
+                    break;
+
                 case 'captchaSolved':
                     await this.handleCaptchaSolved(message.data);
                     sendResponse({ success: true });
@@ -78,6 +86,38 @@ class BackgroundService {
         } catch (error) {
             console.error('Error manejando mensaje:', error);
             sendResponse({ error: error.message });
+        }
+    }
+
+    async handleApiHealth(message) {
+        try {
+            const apiUrl = message.apiUrl;
+            const response = await fetch(`${apiUrl}/health`, { method: 'GET' });
+            const data = await response.json();
+            return { ok: true, data };
+        } catch (error) {
+            return { ok: false, error: error.message };
+        }
+    }
+
+    async handleSolveCaptchaApi(message) {
+        try {
+            const apiUrl = message.apiUrl;
+            const response = await fetch(`${apiUrl}/solve-captcha`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    image: message.image,
+                    pageType: message.pageType,
+                }),
+            });
+
+            const data = await response.json();
+            return { ok: true, status: response.status, data };
+        } catch (error) {
+            return { ok: false, error: error.message };
         }
     }
 

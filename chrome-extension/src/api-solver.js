@@ -17,8 +17,16 @@ class APICaptchaSolver {
      */
     async checkAPIConnection() {
         try {
-            const response = await fetch(`${this.apiUrl}/health`);
-            const data = await response.json();
+            const resp = await chrome.runtime.sendMessage({
+                action: 'apiHealth',
+                apiUrl: this.apiUrl,
+            });
+
+            if (!resp || !resp.ok) {
+                throw new Error(resp?.error || 'No se pudo conectar al background');
+            }
+
+            const data = resp.data;
             
             if (data.status === 'ok' && data.model_loaded) {
                 this.isReady = true;
@@ -53,23 +61,23 @@ class APICaptchaSolver {
             // Convertir ImageData a base64
             const base64Image = await this.imageDataToBase64(imageData);
             
-            // Enviar a API
-            const response = await fetch(`${this.apiUrl}/solve-captcha`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    image: base64Image,
-                    pageType: pageType
-                })
+            // Enviar a API via background (evita mixed content en páginas HTTPS)
+            const resp = await chrome.runtime.sendMessage({
+                action: 'solveCaptchaApi',
+                apiUrl: this.apiUrl,
+                image: base64Image,
+                pageType: pageType,
             });
 
-            if (!response.ok) {
-                throw new Error(`API Error: ${response.status}`);
+            if (!resp || !resp.ok) {
+                throw new Error(resp?.error || 'No se pudo contactar a la API');
             }
 
-            const result = await response.json();
+            if (resp.status && resp.status >= 400) {
+                throw new Error(`API Error: ${resp.status}`);
+            }
+
+            const result = resp.data;
             
             if (result.success) {
                 console.log('🎯 Captcha resuelto con modelo real:', result.prediction);
@@ -187,9 +195,16 @@ class APICaptchaSolver {
      */
     async getAPIStatus() {
         try {
-            const response = await fetch(`${this.apiUrl}/health`);
-            const data = await response.json();
-            return data;
+            const resp = await chrome.runtime.sendMessage({
+                action: 'apiHealth',
+                apiUrl: this.apiUrl,
+            });
+
+            if (!resp || !resp.ok) {
+                return { status: 'error', error: resp?.error || 'No se pudo contactar al background' };
+            }
+
+            return resp.data;
         } catch (error) {
             return { status: 'error', error: error.message };
         }
