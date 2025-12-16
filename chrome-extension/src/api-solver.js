@@ -4,7 +4,7 @@
 class APICaptchaSolver {
     constructor() {
         // Servidor central del modelo en la red local
-        this.apiUrl = 'http://192.168.0.92:5000';
+        this.apiUrl = 'https://sat-captcha-api-188104449120.us-central1.run.app';
         this.isReady = false;
         this.config = MODEL_CONFIG;
         
@@ -31,7 +31,8 @@ class APICaptchaSolver {
             if (data.status === 'ok' && data.model_loaded) {
                 this.isReady = true;
                 console.log('✅ Conexión API establecida');
-                console.log('📝 Vocabulario del modelo:', data.vocab);
+                console.log('📝 Vocabulario del modelo (color):', data.vocab_color);
+                console.log('📝 Vocabulario del modelo (gris):', data.vocab_gris);
             } else {
                 console.warn('⚠️ API disponible pero modelo no cargado');
                 this.isReady = false;
