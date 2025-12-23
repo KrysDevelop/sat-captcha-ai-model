@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Asesor.ia Captcha Resolver",
-  "version": "2.1.3",
+  "version": "2.1.2",
   "description": "Resuelve captchas del SAT automáticamente con Asesor.ia",
   "permissions": [
     "activeTab",
@@ -12,7 +12,9 @@
     "https://cfdiau.sat.gob.mx/*",
     "https://verificacfdi.facturaelectronica.sat.gob.mx/*",
     "https://portalcfdi.factura.sat.gob.mx/*",
-    "https://sat-captcha-api-188104449120.us-central1.run.app/*"
+    "http://localhost:5000/*",
+    "http://192.168.0.169:5000/*",
+    "http://192.168.0.92:5000/*"
   ],
   "content_scripts": [
     {
